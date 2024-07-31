@@ -209,6 +209,70 @@ def delete_favorite_planet(id_planet):
     except:
         return jsonify({"msg": "An unexpected error occurred"}), 500
 
+# Crear usuario, crear planeta y crear personaje
+
+# Crear usuario
+@app.route("/create-user", methods=["POST"])
+def create_user():
+    data = request.json
+    new_user = User(name=data['name'], email=data['email'], password=data['password'], is_active=data['is_active'])
+
+    try:
+        db.session.add(new_user)
+        db.session.commit()
+        
+        response_body = {
+            "msg": "User created successfully",
+        }
+        return jsonify(response_body), 201
+    except:
+        return jsonify({"msg": "Error"}), 500
+
+# Crear nuevo planeta
+@app.route("/create-planet", methods=["POST"])
+def create_planet():
+    data = request.json
+    new_planet= Planet(name=data['name'], 
+                       population=data['population'],
+                       terrain=data['terrain'],
+                       climate=data['climate'],
+                       orbital_period=data['orbital_period'],
+                       rotation_period=data['rotation_period'],
+                       diameter=data['diameter'])
+    try:
+        db.session.add(new_planet)
+        db.session.commit()
+        
+        response_body = {
+            "msg": "Planet created successfully",
+        }
+        return jsonify(response_body), 201
+    except:
+        return jsonify({"msg": "Error"}), 500
+    
+# Crear nuevo personaje
+@app.route("/create-character", methods=["POST"])
+def create_character():
+    data = request.json
+    new_character= Character(name=data['name'], 
+                       gender=data['gender'],
+                       birth_year=data['birth_year'],
+                       height=data['height'],
+                       eye_color=data['eye_color'],
+                       skin_color=data['skin_color'],
+                       hair_color=data['hair_color'])
+
+    try:
+        db.session.add(new_character)
+        db.session.commit()
+        
+        response_body = {
+            "msg": "Character created successfully",
+        }
+        return jsonify(response_body), 201
+    except:
+        return jsonify({"msg": "Error"}), 500
+
 # this only runs if `$ python src/app.py` is executed ------> Esto no se modifica
 if __name__ == '__main__':
     PORT = int(os.environ.get('PORT', 3000))
